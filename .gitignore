@@ -31,5 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/main/java/com/brnwng/awsimageupload/config/AmazonKeys.java
 /src/main/java/com/brnwng/awsimageupload/bucket/BucketName.java
+/src/main/resources/application.properties
