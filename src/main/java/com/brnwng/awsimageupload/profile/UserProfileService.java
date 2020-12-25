@@ -40,10 +40,22 @@ public class UserProfileService {
         String fileName = String.format("%s-%s", file.getOriginalFilename(), UUID.randomUUID());
         try {
             fileStore.save(path, fileName, Optional.of(metaData), file.getInputStream());
+            user.setUserProfileImageLink(fileName);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
+    }
+
+    public byte[] downloadUserProfileImage(UUID userProfileId) {
+        UserProfile user = getUserOrThrow(userProfileId);
+        String path = String.format("%s/%s",
+                BucketName.PROFILE_IMAGE.getBucketName(),
+                user.getUserProfileId());
+
+        return user.getUserProfileImageLink()
+                .map(key -> fileStore.download(path, key))
+                .orElse(new byte[0]);
     }
 
     private Map<String, String> getMetaData(MultipartFile file) {
@@ -73,4 +85,6 @@ public class UserProfileService {
             throw new IllegalStateException("file is empty.");
         }
     }
+
+
 }
